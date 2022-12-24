@@ -3,23 +3,24 @@ const prisma = new Prisma.PrismaClient({ log: ["info", "query"] });
 
 const getpop = async (req, res) => {
 
-    const country = await prisma.Countries.findUnique({
+    const data = await prisma.countries.findUnique({
         where: {
-            id: req.query.id
+            id:parseInt(req.params.id),
         },
+        include: {
+            values: true
+        }
     })
 
-    // const results = await prisma.Values.findMany({
-    //     where: {
-    //         countryId: parseInt(req.query.id)
-                
-            
-    //     }
-    // })
-
-    res.send(countryId.Values)
+       res.send(
+         JSON.parse(JSON.stringify(data, (key, value) =>
+            typeof value === 'bigint'
+                ? value.toString()
+                : value // return everything else unchanged
+        ))
+    )
 
 
 }
 
-module.exports = {getpop};
+module.exports = { getpop };
