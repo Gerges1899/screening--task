@@ -1,7 +1,8 @@
 # screening--task
 # Deliverable
 used-libraries:
-axios
-prisma
-express
-nodemon
+axios \n
+prisma \n 
+express \n
+nodemon \n
+
