@@ -4,7 +4,10 @@ const app = express();
 const prisma = new Prisma.PrismaClient({ log: ["info", "query"] });
 const port = process.env.PORT || 3000;
 const axios = require('axios');
-// const { Prisma } = require('@prisma/client');
+const listroute = require("./controllers/listroute");
+const countryroute = require("./controllers/countryroute");
+app.use(listroute)
+app.use(countryroute)
 app.get('/', (req, res) => {
     const getpopulations = async () => {
         try {
@@ -23,30 +26,20 @@ app.get('/', (req, res) => {
         const countries = await getpopulations()
 
         if (countries.data.data) {
-            await prisma.countries.createMany({
-                data:
-          countries.data.data.map(({ country, populationCounts }) => {
-                return {
-                    country, values: {
-                        create: {
-                            value: {
-                                create:
-                                    populationCounts.map((count) => {
-                                        
-                                        return { year: count.year, value: count.value }
-                                    })
-                            }
+            countries.data.data.map(async ({ country, populationCounts }) => {
+                await prisma.countries.create({
+                    data: {
+                        country, values: {
+                            create: populationCounts.map((count) => {
+                                return { year: count.year, value: count.value }
+                            })
                         }
                     }
-                }
-            })
-            
-
-
-            })
-        }
+                })
+            })
+        }
     }
-    res.send(countpopulations())
+    countpopulations()
 });
 
 

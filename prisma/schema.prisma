@@ -12,7 +12,7 @@ datasource db {
 
 model Countries {
   id      Int      @id @default(autoincrement())
-  country String   @db.VarChar(255)
+  country String   @unique @db.VarChar(255)
   values  Values[]
 }
 
@@ -20,6 +20,6 @@ model Values {
   id        Int       @id @default(autoincrement())
   country   Countries @relation(fields: [countryId], references: [id])
   countryId Int
-  year      Int
-  value    Int
+  year      Int       @unique
+  value     BigInt
 }
